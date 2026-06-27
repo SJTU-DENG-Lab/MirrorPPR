@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>MirrorPPR: Exemplar-Based Portrait Photo Retouching</title>
+  <meta name="title" content="MirrorPPR: Exemplar-Based Portrait Photo Retouching">
+  <meta name="description" content="MirrorPPR transfers subtle structural portrait retouching operations from exemplar before/after pairs to new query portraits.">
+  <meta name="keywords" content="MirrorPPR, portrait photo retouching, exemplar-based image editing, diffusion transformer">
+  <meta name="author" content="Zhihong Liu, Zheng Li, Jiachun Jin, Siqi Kou, Yitao Jian, Fengpei Yu, Zhijie Deng">
+  <meta name="robots" content="index, follow">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="MirrorPPR Project Page">
+  <meta property="og:title" content="MirrorPPR: Exemplar-Based Portrait Photo Retouching">
+  <meta property="og:description" content="Exemplar-based structural portrait retouching with strong identity preservation.">
+  <meta property="og:image" content="static/images/social_preview.png">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <meta name="citation_title" content="MirrorPPR: Exemplar-Based Portrait Photo Retouching">
+  <meta name="citation_author" content="Liu, Zhihong">
+  <meta name="citation_author" content="Li, Zheng">
+  <meta name="citation_author" content="Jin, Jiachun">
+  <meta name="citation_author" content="Kou, Siqi">
+  <meta name="citation_author" content="Jian, Yitao">
+  <meta name="citation_author" content="Yu, Fengpei">
+  <meta name="citation_author" content="Deng, Zhijie">
+  <meta name="citation_publication_date" content="2026">
+  <meta name="citation_conference_title" content="European Conference on Computer Vision">
+
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="static/css/academicons.min.css">
+  <link rel="stylesheet" href="static/css/index.css?v=20260627e">
+
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script defer src="static/js/mirrorppr-examples.js?v=20260627e"></script>
+  <script defer src="static/js/mirrorppr-qualitative.js?v=20260627e"></script>
+  <script defer src="static/js/index.js?v=20260627e"></script>
+</head>
+<body>
+  <section class="hero publication-header">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">MirrorPPR: Exemplar-Based Portrait Photo Retouching</h1>
+
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">Zhihong Liu<sup>1</sup>,</span>
+              <span class="author-block">Zheng Li<sup>1</sup>,</span>
+              <span class="author-block">Jiachun Jin<sup>1</sup>,</span>
+              <span class="author-block">Siqi Kou<sup>1</sup>,</span>
+              <span class="author-block">Yitao Jian<sup>1</sup>,</span>
+              <span class="author-block">Fengpei Yu<sup>2</sup>,</span>
+              <span class="author-block">Zhijie Deng<sup>1</sup><sup class="corresponding-icon" aria-hidden="true"><i class="fas fa-envelope"></i></sup></span>
+            </div>
+
+            <div class="is-size-5 publication-authors">
+              <span class="author-block"><sup>1</sup>Shanghai Jiao Tong University</span>
+              <span class="author-block"><sup>2</sup>China Aerospace Science and Technology Corporation</span>
+            </div>
+
+            <div class="publication-links">
+              <span class="link-block">
+                <a href="./" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="ai ai-arxiv"></i></span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="./" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon" aria-hidden="true">
+                    <svg class="button-svg" viewBox="0 0 24 24" role="img">
+                      <path fill="currentColor" d="M12 0.5C5.65 0.5 0.5 5.65 0.5 12c0 5.09 3.29 9.39 7.86 10.91 0.58 0.1 0.79 -0.25 0.79 -0.56 0 -0.27 -0.01 -1.18 -0.02 -2.14 -3.2 0.7 -3.87 -1.36 -3.87 -1.36 -0.52 -1.33 -1.28 -1.69 -1.28 -1.69 -1.05 -0.72 0.08 -0.7 0.08 -0.7 1.16 0.08 1.77 1.19 1.77 1.19 1.03 1.76 2.69 1.25 3.35 0.96 0.1 -0.75 0.4 -1.25 0.73 -1.54 -2.55 -0.29 -5.23 -1.28 -5.23 -5.68 0 -1.25 0.45 -2.28 1.18 -3.08 -0.12 -0.29 -0.51 -1.46 0.11 -3.04 0 0 0.96 -0.31 3.16 1.18 0.92 -0.26 1.9 -0.38 2.88 -0.39 0.98 0 1.96 0.13 2.88 0.39 2.2 -1.49 3.16 -1.18 3.16 -1.18 0.62 1.58 0.23 2.75 0.11 3.04 0.74 0.8 1.18 1.83 1.18 3.08 0 4.42 -2.69 5.39 -5.25 5.68 0.41 0.36 0.78 1.07 0.78 2.16 0 1.56 -0.01 2.81 -0.01 3.2 0 0.31 0.21 0.67 0.79 0.56A11.52 11.52 0 0 0 23.5 12C23.5 5.65 18.35 0.5 12 0.5Z"></path>
+                    </svg>
+                  </span>
+                  <span>Code</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="./" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fas fa-cube"></i></span>
+                  <span>Model</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="./" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fas fa-database"></i></span>
+                  <span>Dataset</span>
+                </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="hero teaser" id="examples">
+    <div class="container is-max-desktop">
+      <div class="hero-body">
+        <div class="tabs is-centered is-toggle is-toggle-rounded example-tabs">
+          <ul>
+            <li class="is-active" data-subset-tab="simulated"><a><span>MirrorPPR-Face</span><small>on SimFace-100</small></a></li>
+            <li data-subset-tab="professional"><a><span>MirrorPPR-Pro</span><small>on ProPortrait-500</small></a></li>
+          </ul>
+        </div>
+
+        <div class="example-stage">
+          <div class="tabs is-centered is-toggle is-toggle-rounded example-tabs example-expanded-tabs">
+            <ul>
+              <li class="is-active" data-subset-tab="simulated"><a><span>MirrorPPR-Face</span><small>on SimFace-100</small></a></li>
+              <li data-subset-tab="professional"><a><span>MirrorPPR-Pro</span><small>on ProPortrait-500</small></a></li>
+            </ul>
+          </div>
+
+          <button class="example-arrow example-arrow-left" type="button" id="example-prev" aria-label="Previous example">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+
+          <div class="example-viewer" id="example-viewer" aria-live="polite">
+            <div class="example-instruction">“Widen nasal alae”</div>
+            <button class="example-expand" type="button" aria-label="Enlarge example viewer" title="Enlarge example viewer">
+              <i class="fas fa-expand"></i>
+            </button>
+            <div class="example-pairs">
+              <figure class="example-image-card">
+                <img class="example-image" src="static/images/mirrorppr/release/face-034-example-source.jpg" alt="Example source before retouching" draggable="false">
+                <figcaption class="image-state-label">Source</figcaption>
+              </figure>
+              <figure class="example-image-card">
+                <img class="example-image" src="static/images/mirrorppr/release/face-034-query-source.jpg" alt="Query source before retouching" draggable="false">
+                <figcaption class="image-state-label">Query</figcaption>
+              </figure>
+            </div>
+            <div class="example-toggle-row">
+              <button class="button example-toggle" type="button">Show target/retouched image</button>
+            </div>
+          </div>
+
+          <button class="example-arrow example-arrow-right" type="button" id="example-next" aria-label="Next example">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+
+        <h2 class="subtitle">
+          Instead of relying on ambiguous text instructions, MirrorPPR infers fine-grained structural retouching operations from a before-and-after exemplar pair—such as facial-feature adjustment, face-contour refinement, and body-proportion reshaping—and transfers them to a new portrait while preserving identity and leaving unrelated regions unchanged.
+        </h2>
+      </div>
+    </div>
+  </section>
+
+  <section class="section hero is-light" id="abstract">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Abstract</h2>
+          <div class="content has-text-justified">
+            <p>
+              While text-guided image editing has made remarkable progress, it remains limited in structural portrait retouching. Textual descriptions struggle to convey fine-grained changes to facial features and body proportions. To address this gap, we introduce Exemplar-Based Portrait Photo Retouching, where the model is given an exemplar pair and tasked with inferring and applying the same retouching operations to a new query image. Existing exemplar-based editing methods primarily focus on tasks with pronounced visual transformations. In contrast, structural portrait retouching involves extremely delicate and localized modifications, making accurate extraction and transfer of these edits challenging. To tackle this, we propose MirrorPPR, a novel framework specifically designed to capture and transfer subtle structural retouching operations. Our method uses a Retouching Operation Extractor to capture the subtle differences from the exemplar pair. The extracted representations are then injected into a pre-trained Diffusion Transformer (DiT) through a connector and Low-Rank Adaptation (LoRA) modules. Furthermore, constructing perfectly aligned cross-identity training pairs is severely hindered by operational misalignment. To overcome this, we propose an advanced data self-augmentation paradigm that ensures strictly aligned retouching operations. To alleviate data scarcity and support this novel task, we introduce MirrorPPR47M, a large-scale dataset with over 47 million retouched pairs. By structuring the dataset into simulated and professional subsets, we enable progressive curriculum learning to smoothly optimize the network. Extensive experiments demonstrate that MirrorPPR significantly outperforms existing baselines in both retouching quality and identity preservation.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="method">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Method</h2>
+      <div class="content has-text-justified">
+        <p>
+          MirrorPPR formulates portrait photo retouching as exemplar-based retouching operation transfer. Given an exemplar source image <span class="math-var">X<sub>s</sub></span> , its retouched counterpart <span class="math-var">X<sub>t</sub></span> , and a new query portrait <span class="math-var">X<sub>q</sub></span> , the goal is to generate a retouched result that applies the same operations demonstrated by the exemplar pair.
+          The framework first uses a Retouching Operation Extractor to capture the subtle differences between <span class="math-var">X<sub>s</sub></span> and <span class="math-var">X<sub>t</sub></span> : a frozen MAE provides local, structure-aware patch features, while a trainable R-Former uses learnable query tokens to distill these features into a compact operation representation. The extractor is pre-trained with an auxiliary reconstruction task, encouraging the representation to encode precise retouching intent.
+          After pre-training, the extracted operation representation is mapped by a connector into the conditioning space of a frozen dual-stream DiT backbone. Since the task is driven by visual demonstrations rather than text instructions, MirrorPPR conditions the diffusion model on the query image and the extracted retouching operation. The R-Former, connector, and newly added LoRA modules are jointly fine-tuned, enabling the model to learn retouching operation transfer while preserving the strong prior of the pre-trained editing model.
+        </p>
+      </div>
+      <div class="publication-image">
+        <img src="static/images/mirrorppr/figures/MirrorPPR_achitecture2.png" alt="MirrorPPR architecture">
+        <p class="method-caption has-text-centered">
+          <span>Extract operation</span>
+          <span class="caption-arrow">&rarr;</span>
+          <span>Inject into DiT</span>
+          <span class="caption-arrow">&rarr;</span>
+          <span>Transfer to query</span>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section hero is-light" id="self-augmentation">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Data Self-Augmentation</h2>
+      <div class="content has-text-justified">
+        <p>
+          A central challenge in exemplar-based portrait retouching is constructing valid cross-identity training quadruplets. Because portraits differ in pose, shot scale, occlusion, and visible body regions, the same local retouching operation may not be applicable or spatially aligned across different identities. Meanwhile, the naive same-identity construction, where the exemplar source is directly reused as the query, introduces pixel-level shortcut learning: the model may simply copy coordinate-wise differences instead of understanding the underlying retouching semantics.
+        </p>
+        <p>
+          MirrorPPR addresses this with Data Self-Augmentation. For each source-target exemplar pair (<span class="math-var">X<sub>s</sub></span> , <span class="math-var">X<sub>t</sub></span>), we apply the same random spatial augmentation <span class="math-var">A</span> , such as scaling, cropping, rotation, or horizontal flipping, to both images, forming <span class="math-formula">X<sub>q</sub> = A(X<sub>s</sub>)</span> and <span class="math-formula">Y<sub>q</sub> = A(X<sub>t</sub>)</span>. This construction keeps the retouching operation strictly aligned between the exemplar pair and the query pair, while breaking their absolute coordinate correspondence. As a result, the model is encouraged to transfer the demonstrated operation according to the query portrait’s own spatial layout, enabling robust cross-identity generalization.
+        </p>
+      </div>
+      <div class="publication-image self-augmentation-figure">
+        <img src="static/images/mirrorppr/figures/data-aug-projectpage.png" alt="Data self-augmentation illustration">
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="dataset">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">MirrorPPR47M Dataset</h2>
+      <div class="content has-text-justified">
+        <p>
+          MirrorPPR47M is a large-scale dataset designed for exemplar-based portrait retouching. It contains over 47 million retouched pairs covering facial features, face contours, and body proportions. To make subtle real-world retouching learnable, the dataset is organized for an easy-to-hard curriculum: a Simulated Retouching Subset provides pronounced geometric deformations for learning fundamental structural variations, while a Professional Retouching Subset provides authentic and fine-grained retouching operations.
+        </p>
+        <p>
+          The simulated subset is built from 30,171 high-quality FFHQ images and uses Landmark-Guided Local Warping (LLW) to generate 8 base facial operation types, each with two opposite directions, resulting in 808,439 retouched pairs. The professional subset is built from 3,789 4K–8K portraits from PPR10K and applies 27 professional retouching operations, including 18 facial-feature operations, 4 face-shape operations, and 5 body-proportion operations, yielding 46,642,845 finely retouched pairs. Together with the self-augmentation pipeline, MirrorPPR47M provides operation-aligned yet spatially decoupled training data for learning realistic structural portrait retouching.
+        </p>
+      </div>
+      <div class="dataset-stats">
+        <div class="dataset-stat is-sim-pairs">
+          <strong>808K</strong>
+          <span>simulated retouched pairs</span>
+        </div>
+        <div class="dataset-stat is-pro-pairs">
+          <strong>46.6M</strong>
+          <span>professional retouched pairs</span>
+        </div>
+        <div class="dataset-stat is-sim-ops">
+          <strong>8</strong>
+          <span>simulated retouching operation types</span>
+        </div>
+        <div class="dataset-stat is-pro-ops">
+          <strong>27</strong>
+          <span>professional retouching operation types</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section hero is-light" id="results">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Experimental Results</h2>
+      <div class="content has-text-justified">
+        <p>
+          We evaluate MirrorPPR in a cross-identity setting where the exemplar pair and the query portrait come from different identities, matching the intended inference scenario rather than the self-augmented training construction. SimFace-100 contains 100 combinations of 8 LLW-based facial retouching operations applied to 12 face images, while ProPortrait-500 contains 500 combinations of 27 professional operations applied to 40 high-quality portraits. MirrorPPR is compared with strong baselines from three categories: multi-reference image editing, exemplar-based image editing, and text-guided image editing.
+        </p>
+        <p>
+          The results show that existing multi-reference and exemplar-based methods often misinterpret the task as image blending, copying, or face swapping. Text-guided methods achieve better reconstruction but still suffer from identity drift and imprecise control over fine-grained structural changes. In contrast, MirrorPPR consistently transfers the demonstrated structural operations with high fidelity and strong identity preservation.
+        </p>
+      </div>
+
+      <h3 class="title is-5 has-text-centered">Quantitative Comparisons</h3>
+      <div class="result-table-block table-container">
+        <table class="paper-table">
+          <caption>Quantitative comparison results with baselines on SimFace-100.</caption>
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>Model</th>
+              <th>PSNR ↑</th>
+              <th>SSIM ↑</th>
+              <th>LPIPS ↓</th>
+              <th>Face Similarity ↑</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="group-start">
+              <td class="category-cell" rowspan="4">Multi-Reference<br>Image Editing</td>
+              <td class="model-cell">Qwen-Image-Edit-2511</td><td>9.06</td><td>0.468</td><td>0.745</td><td>0.207</td>
+            </tr>
+            <tr><td class="model-cell">FLUX.2-dev</td><td>9.28</td><td>0.481</td><td>0.698</td><td>0.110</td></tr>
+            <tr><td class="model-cell">Nano Banana 2</td><td>16.72</td><td>0.784</td><td>0.329</td><td>0.556</td></tr>
+            <tr><td class="model-cell">Seedream 4.5</td><td>13.01</td><td>0.709</td><td>0.501</td><td>0.351</td></tr>
+            <tr class="group-start">
+              <td class="category-cell" rowspan="3">Exemplar-based</td>
+              <td class="model-cell">Qwen-Image-Edit-2511-ICEdit-LoRA</td><td>9.21</td><td>0.533</td><td>0.640</td><td>0.300</td>
+            </tr>
+            <tr><td class="model-cell">RelationAdapter</td><td>16.57</td><td>0.698</td><td>0.543</td><td>0.204</td></tr>
+            <tr><td class="model-cell">EditTransfer</td><td>15.68</td><td>0.691</td><td>0.492</td><td>0.464</td></tr>
+            <tr class="group-start">
+              <td class="category-cell" rowspan="4">Text-guided</td>
+              <td class="model-cell">Qwen-Image-Edit-2511</td><td>25.80</td><td>0.862</td><td>0.260</td><td>0.463</td>
+            </tr>
+            <tr><td class="model-cell">FLUX.2-dev</td><td>22.44</td><td>0.804</td><td>0.301</td><td>0.531</td></tr>
+            <tr><td class="model-cell">Nano Banana 2</td><td>24.25</td><td>0.860</td><td>0.239</td><td>0.601</td></tr>
+            <tr><td class="model-cell">Seedream 4.5</td><td>18.01</td><td>0.788</td><td>0.368</td><td>0.600</td></tr>
+            <tr class="group-start ours-row">
+              <td class="category-cell"><strong>Ours</strong></td>
+              <td class="model-cell"><strong>MirrorPPR-Face</strong></td><td><strong>32.25</strong></td><td><strong>0.909</strong></td><td><strong>0.186</strong></td><td><strong>0.937</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="result-table-block table-container">
+        <table class="paper-table">
+          <caption>Quantitative comparison results with baselines on ProPortrait-500.</caption>
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>Model</th>
+              <th>PSNR ↑</th>
+              <th>SSIM ↑</th>
+              <th>LPIPS ↓</th>
+              <th>Face Similarity ↑</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="group-start">
+              <td class="category-cell" rowspan="4">Multi-Reference<br>Image Editing</td>
+              <td class="model-cell">Qwen-Image-Edit-2511</td><td>10.23</td><td>0.538</td><td>0.645</td><td>0.413</td>
+            </tr>
+            <tr><td class="model-cell">FLUX.2-dev</td><td>9.36</td><td>0.466</td><td>0.728</td><td>0.220</td></tr>
+            <tr><td class="model-cell">Nano Banana 2</td><td>17.72</td><td>0.835</td><td>0.250</td><td>0.811</td></tr>
+            <tr><td class="model-cell">Seedream 4.5</td><td>12.12</td><td>0.689</td><td>0.436</td><td>0.705</td></tr>
+            <tr class="group-start">
+              <td class="category-cell" rowspan="3">Exemplar-based</td>
+              <td class="model-cell">Qwen-Image-Edit-2511-ICEdit-LoRA</td><td>12.06</td><td>0.631</td><td>0.564</td><td>0.606</td>
+            </tr>
+            <tr><td class="model-cell">RelationAdapter</td><td>15.74</td><td>0.709</td><td>0.586</td><td>0.283</td></tr>
+            <tr><td class="model-cell">EditTransfer</td><td>18.32</td><td>0.748</td><td>0.481</td><td>0.457</td></tr>
+            <tr class="group-start">
+              <td class="category-cell" rowspan="4">Text-guided</td>
+              <td class="model-cell">Qwen-Image-Edit-2511</td><td>20.85</td><td>0.732</td><td>0.387</td><td>0.501</td>
+            </tr>
+            <tr><td class="model-cell">FLUX.2-dev</td><td>19.94</td><td>0.748</td><td>0.345</td><td>0.616</td></tr>
+            <tr><td class="model-cell">Nano Banana 2</td><td>27.45</td><td>0.904</td><td><strong>0.183</strong></td><td>0.667</td></tr>
+            <tr><td class="model-cell">Seedream 4.5</td><td>16.43</td><td>0.770</td><td>0.378</td><td>0.782</td></tr>
+            <tr class="group-start ours-row">
+              <td class="category-cell"><strong>Ours</strong></td>
+              <td class="model-cell"><strong>MirrorPPR-Pro</strong></td><td><strong>32.65</strong></td><td><strong>0.927</strong></td><td>0.200</td><td><strong>0.960</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="title is-5 has-text-centered qualitative-title">Qualitative Comparisons</h3>
+      <div class="qualitative-browser">
+        <div class="tabs is-centered is-toggle is-toggle-rounded example-tabs qualitative-tabs">
+          <ul>
+            <li class="is-active" data-qualitative-subset-tab="simulated"><a><span>MirrorPPR-Face</span><small>on SimFace-100</small></a></li>
+            <li data-qualitative-subset-tab="professional"><a><span>MirrorPPR-Pro</span><small>on ProPortrait-500</small></a></li>
+          </ul>
+        </div>
+        <button class="qualitative-nav qualitative-nav-left" type="button" id="qualitative-prev" aria-label="Previous qualitative example">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <div id="qualitative-viewer" class="qualitative-viewer" aria-live="polite"></div>
+        <button class="qualitative-nav qualitative-nav-right" type="button" id="qualitative-next" aria-label="Next qualitative example">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="bibtex">
+    <div class="container is-max-desktop content">
+      <div class="bibtex-header">
+        <h2 class="title">BibTeX</h2>
+        <button class="copy-bibtex-btn button is-light" type="button" title="Copy BibTeX">
+          Copy
+        </button>
+      </div>
+      <pre id="bibtex-code"><code></code></pre>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="content has-text-centered">
+        <p>
+          This page is based on the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank" rel="noopener">Academic Project Page Template</a>.
+        </p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
