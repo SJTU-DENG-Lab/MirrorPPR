@@ -39,6 +39,12 @@ body {
   margin: 0 0.15rem;
 }
 
+.publication-venue {
+  font-family: 'Google Sans', 'Noto Sans', 'Inter', sans-serif;
+  font-weight: 600;
+  margin-top: 0.2rem;
+}
+
 .publication-links {
   margin-top: 2rem;
 }
