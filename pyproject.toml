@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mirrorppr"
+version = "0.1.0"
+description = "Utilities for the MirrorPPR public release."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "accelerate",
+  "datasets",
+  "diffusers",
+  "einops",
+  "huggingface-hub>=0.24",
+  "insightface",
+  "lpips",
+  "mediapipe==0.10.21",
+  "numpy<2",
+  "opencv-contrib-python<4.12",
+  "opencv-python<4.12",
+  "opencv-python-headless<4.12",
+  "pandas",
+  "pillow",
+  "pyyaml",
+  "safetensors",
+  "timm",
+  "tqdm",
+  "torch",
+  "torchvision",
+  "torchmetrics",
+  "transformers",
+]
+
+[tool.setuptools.packages.find]
+include = ["mirrorppr*", "diffsynth*"]

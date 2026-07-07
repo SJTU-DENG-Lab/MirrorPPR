@@ -1,0 +1,33 @@
+name: mirrorppr
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - pip
+  - libgl
+  - pip:
+      - torch==2.9.1
+      - torchvision==0.24.1
+      - transformers==4.57.1
+      - diffusers==0.36.0
+      - accelerate==1.11.0
+      - safetensors==0.7.0
+      - peft==0.18.0
+      - timm==1.0.22
+      - huggingface-hub==0.36.0
+      - datasets==4.4.1
+      - opencv-python==4.11.0.86
+      - opencv-python-headless==4.11.0.86
+      - opencv-contrib-python==4.11.0.86
+      - pillow==12.0.0
+      - numpy==1.26.4
+      - pandas==2.3.3
+      - mediapipe==0.10.21
+      - insightface==1.0.1
+      - onnxruntime-gpu==1.23.2
+      - torchmetrics
+      - lpips
+      - tqdm==4.67.1
+      - pyyaml==6.0.3
+      - einops==0.8.1
+      - -e .
