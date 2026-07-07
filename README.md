@@ -7,8 +7,9 @@
 <p align="center">
   <a href="https://arxiv.org/abs/2606.29308"><b>Paper</b></a> |
   <a href="https://sjtu-deng-lab.github.io/MirrorPPR"><b>Project Page</b></a> |
-  <a href="https://github.com/SJTU-DENG-Lab/MirrorPPR"><b>Model</b></a> |
-  <a href="https://github.com/SJTU-DENG-Lab/MirrorPPR"><b>Dataset</b></a>
+  <a href="https://huggingface.co/SJTU-DENG-Lab/MirrorPPR-Face"><b>Model</b></a> |
+  <a href="https://huggingface.co/datasets/SJTU-DENG-Lab/MirrorPPR47M"><b>Dataset</b></a> |
+  <a href="https://huggingface.co/datasets/SJTU-DENG-Lab/SimFace-100"><b>Benchmark</b></a>
 </p>
 
 ## Abstract
@@ -25,5 +26,3 @@ Extensive experiments demonstrate that MirrorPPR significantly outperforms exist
   <img src="assets/model_architecture.png?raw=true" width="900" alt="MirrorPPR model architecture"/>
 </p>
 
-
-Code, models, and the dataset will be released soon.
